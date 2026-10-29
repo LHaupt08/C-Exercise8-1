@@ -8,6 +8,10 @@ namespace InvoiceTotal
         }
 
         // TODO: declare class variables for array and list here
+        decimal[] invoiceTotals = new decimal[5];
+        int invoiceIndex = 0;
+
+        List<decimal> invoiceTotalList = new List<decimal>();
 
         private void btnCalculate_Click(object sender, EventArgs e)
         {
@@ -30,6 +34,11 @@ namespace InvoiceTotal
                         txtDiscountPct.Text = discountPct.ToString("p1");
                         txtDiscountAmt.Text = discountAmt.ToString("c");
                         txtTotal.Text = invoiceTotal.ToString("c");
+
+                        invoiceTotals[invoiceIndex] = invoiceTotal;
+                        invoiceIndex+= 1;
+
+                        invoiceTotalList.Add(invoiceTotal);
                     }
                     else
                     {
@@ -38,6 +47,10 @@ namespace InvoiceTotal
                             "Entry Error");
                     }
                 }
+            }
+            catch(IndexOutOfRangeException)
+            {
+                MessageBox.Show("You have inserted the max ammount of invoices. Please exit the application before entering more invoices.", "Index Out Of Range Exception");
             }
             catch
             {
@@ -51,6 +64,32 @@ namespace InvoiceTotal
         private void btnExit_Click(object sender, EventArgs e)
         {
             // TODO: add code that displays dialog boxes here
+            Array.Sort(invoiceTotals);
+            string invoiceHistoryArray = "";
+
+            foreach (decimal total in invoiceTotals)
+            {
+
+                if (total != 0)
+                {
+                    invoiceHistoryArray += Convert.ToString(total) + "\n";
+                }
+
+            }
+
+            invoiceTotalList.Sort();
+            string invoiceHistoryList = "";
+
+            foreach (decimal total in invoiceTotalList)
+            {
+                if (total != 0)
+                {
+                    invoiceHistoryList += Convert.ToString(total) + "\n";
+                }
+            }
+
+            MessageBox.Show(invoiceHistoryArray, "Invoice History (Array)");
+            MessageBox.Show(invoiceHistoryList, "Invoice History (List)");
 
             this.Close();
         }
